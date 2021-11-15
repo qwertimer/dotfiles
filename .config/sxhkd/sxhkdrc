@@ -1,0 +1,243 @@
+## Copyright (C) 2020-2021 Aditya Shakya <adi1090x@gmail.com>
+# Modified from aditya
+## Everyone is permitted to copy and distribute copies of this file under GNU-GPL3
+
+super + question
+  helpsxhkd
+
+# --------------------------------- Terminal ---------------------------------
+# Terminal (alacritty)
+super + Return
+	bspterm
+
+# Terminal (floating)
+super + shift + Return
+	bspterm -f
+
+# Terminal (fullscreen)
+super + t
+	bspterm -s	
+
+# "Drop down" terminal
+alt + comma 
+	bspc-toggle-visibility scratch1 "$TERMINAL -g 100x30 -name scratch1" 
+
+
+
+##---------- Rofi Launcher & Menus ----------##
+
+# Rofi App Launcher
+{alt, super} + F1
+	sh ~/.config/bspwm/rofi/bin/launcher
+
+# Rofi Network Menu
+super + n
+	nmd
+
+# Rofi Themes Menu
+ctrl + alt + t
+	sh ~/.config/bspwm/rofi/bin/themes
+
+# Rofi Menus/Applets
+super + {w,m,x,r,s,i}
+	sh ~/.config/bspwm/rofi/bin/{windows,mpd,powermenu,asroot,screenshot,network}
+
+ctrl + super + n
+   alacritty --config-file ~/.config/bspwm/alacritty/alacritty.yml -e ncmpcpp
+##---------- Applications ----------##
+
+# Launch Apps ((f)Pcmanfm, (w)firefox, (m)music, (e)emacs)
+super + shift + {f,w,m,e}
+	{pcmanfm,firefox,music,emacs}
+
+super + alt + m
+    bspterm -e spt
+
+# Terminal Apps (Vim, Nvim, Ranger, Htop, Bashtop)
+ctrl + alt + {v,n,r,h,b}
+	alacritty --config-file ~/.config/bspwm/alacritty/alacritty.yml -e {vim,nvim,ranger,htop,bashtop}
+
+
+super + o
+    rofi-beats
+# Color Picker
+#super + p
+#	color-gpick
+
+
+#ctrl + alt + l
+# Lockscreen
+super + l
+    bsplock
+
+
+
+##---------- System Keys ----------##
+
+
+# Take a screenshot
+Print
+	takeshot --now
+	
+# Take screenshot in 5 second
+alt + Print	
+	takeshot --in5
+
+# Take screenshot in 10 second
+shift + Print	
+	takeshot --in10
+
+# Take screenshot of active window
+ctrl + Print
+	takeshot --win
+
+# Take screenshot of area
+ctrl + alt + Print
+	takeshot --area
+
+# Brighness control
+ctrl + {F11,F12}
+	brightness{ --inc, --dec}
+	
+# Volume control
+Menu+ {F3,F2}
+	volume{ --inc, --dec}
+
+Menu + {F1}
+	volume --toggle
+
+# Music control
+Menu +  {F7, F5, F6 }
+	ncmpcpp {next,prev,toggle}
+
+##---------- Bspwm ----------##
+
+#super + {_,shift + }c
+# Close App, kill app
+super + {_,shift + }q
+	bspc node -{c,k}
+
+# Reload Keybindings
+super + Escape
+	pkill -USR1 -x sxhkd
+
+# kill window
+ctrl + alt + Escape
+    xkill
+
+# Quit/Restart bspwm
+ctrl + shift + {q,r}
+	bspc {quit,wm -r}
+	
+#super + {h,v,q}
+# Split horizontal, vertical or cancel
+super + {h,v}
+	bspc node -p {east,south}
+
+# Preselect the ratio
+super + ctrl + {1-9}
+	bspc node -o 0.{1-9}
+
+# Fullscreen or Monocle
+super + F11
+#	bspc desktop -l next
+    bspc node -t "~"fullscreen
+
+# Toggle beetwen floating & tiled
+super + space
+    bspc node -t "~"{floating,tiled}
+
+# Pseudo Tiled & tiled mode
+super + shift + space
+#super + {p,t}
+    bspc node -t "~"{pseudo_tiled,tiled}
+
+# Set the node flags
+super + ctrl + {m,x,y,z}
+	bspc node -g {marked,locked,sticky,private}
+
+# Send the window to another edge of the screen
+super + {_,shift + }{Left,Down,Up,Right}
+	bspc node -{f,s} {west,south,north,east}
+
+# Change focus to next window, including floating window
+alt + {_,shift + }Tab
+	bspc node -f {next.local,prev.local}
+
+# Switch workspace
+ctrl + alt + {Left,Right}
+	bspc desktop -f {prev.local,next.local}
+
+# Switch to last opened workspace
+super + {Tab,grave}
+	bspc {node,desktop} -f last
+
+# Send focused window to another workspace or show desktop
+super + {_,shift + }{1-9,0}
+	bspc {desktop -f,node -d} focused:'^{1-9,10}'
+
+# Expanding windows
+super + control + {Left,Right,Up,Down}
+	bspc node -z {left -20 0,right 20 0,top 0 -20,bottom 0 20}
+	
+# Shrinking windows
+super + alt + {Left,Right,Up,Down}
+	bspc node -z {left 20 0,right -20 0,top 0 20,bottom 0 -20}
+	
+# Move floating windows
+alt + shift + {Left,Down,Up,Right}
+	bspc node -v {-20 0,0 20,0 -20,20 0}
+
+# Hide/Unhide Window
+super + shift + i
+	winmask		
+
+# Move window to 
+alt + {1-9,0}
+    d='{1-9,10}'; \
+        bspc desktop -f "$d.local" || bspc desktop -s "$d"
+
+# send node to next monitor, use preselect area if available
+super + shift + g
+   bspc node -n 'next.!automatic.active' || bspc node -m next
+
+
+# Scratchpad feature
+
+super + apostrophe
+	id=$(bspc query -N -n "focused");\
+	if [ -n "$id" ];then \
+		xprop -id $id -f _SCRATCH 32ii -set _SCRATCH $(date +%s,%N);\
+		bspc node -t "floating";\
+		xdotool windowunmap $id;\
+	fi
+
+super + shift + apostrophe
+	i=$(bspc query -N -n "focused.floating");\
+	if [ -n "$i" ];then \
+		xprop -id $i -f _SCRATCH 32ii -set _SCRATCH $(date +%s,%N);\
+		xdotool windowunmap $i;\
+	else;\
+		i=$(for w in $(xwininfo -root -children | grep -e "^\s*0x[0-9a-f]\+" -o);do \
+			t=$(xprop -id $w _SCRATCH | grep ' = \(.*\)');\
+			if [ -n "$t" ];then \
+				echo $t $w;\
+			fi;\
+		done|sort -n|head -n1|cut -d" " -f 5);\
+		if [ -n "$i" ];then \
+			xprop -id $i -remove _SCRATCH;\
+			bspc rule -a \* state=floating center=on --one-shot;\
+			xdotool windowmap $i;\
+			bspc node -f $i;\
+		fi;\
+	fi
+
+
+#hide and unhide
+#
+alt + h
+    while bspc node any.hidden.window -g hidden=off; do false; done \
+        && while bspc node 'any.!hidden.window' -g hidden=on; do :; done
+
+
+##---------- EOF ----------##

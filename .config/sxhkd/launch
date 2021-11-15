@@ -1,0 +1,33 @@
+#!/bin/bash
+
+
+export SXHKD_SCRIPT_DIR="$HOME/.config/sxhkd"
+export SXHKD_CONFIG_DIR="$HOME/.config"
+
+APP_NAME=sxhkd
+
+# Terminate already running bar instances
+killall -q $APP_NAME
+
+# Wait until the processes have been shut down
+while pgrep -u $UID -x $APP_NAME >/dev/null
+do 
+	sleep 1
+done
+
+# Launch sxhkd 
+
+## run configs based on window manager.
+command -v wmctrl || exit
+if wmctrl -m | grep "GNOME"; then
+  $APP_NAME -c "$HOME/.config/$APP_NAME/gnome_sxhkdrc" & 
+
+elif wmctrl -m | grep "xmonad"; then
+  $APP_NAME -c "$HOME/.config/$APP_NAME/xmonad_config" &
+
+elif wmctrl -m | grep "bspwm"; then
+  $APP_NAME -c "$HOME/.config/$APP_NAME/bsp_sxhkdrc" &
+
+fi
+
+

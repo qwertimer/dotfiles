@@ -1,0 +1,96 @@
+## sxhkd for gnome ubuntu installation.
+
+#Help tool
+super + question
+  helpsxhkd
+
+ --------------------------------- Terminal ---------------------------------
+# Terminal (alacritty)
+super + Return
+	alacritty
+
+# "Drop down" terminal
+alt + comma 
+	yakuake
+
+
+##---------- Rofi Launcher & Menus ----------##
+
+# Rofi App Launcher
+{alt, super} + F1
+	sh ~/.config/rofi/bin/launcher
+    
+
+# Rofi Menus/Applets
+super + {w}
+	sh ~/.config/rofi/bin/{windows}
+
+# Launch Apps ((f)Pcmanfm, (w)firefox, (m)music, (e)emacs)
+super + shift + {f,w,e}
+	{nautilus,firefox,emacs}
+
+
+# Terminal Apps (Vim, Nvim, Ranger, Htop, Bashtop)
+ctrl + alt + {v,r,h}
+	alacritty --config-file ~/.config/bspwm/alacritty/alacritty.yml -e {vim,ranger,htop}
+
+super + o
+    rofi-beats
+
+super + l
+    WINDOW_ID=`xdotool search --classname Desktop`
+    xdg-screensaver suspend $WINDOW_ID
+    #xautolock -locknow
+
+
+## Workspace and program management
+
+# Close App, kill app
+super + {_,shift + }q
+    xdotool getwindowfocus windowkill
+
+
+# Send focused window to another workspace or show desktop 
+#(off by 1 as gnome uses 0 based workspaces)
+super + shift + {1-9,0}
+	xdotool getactivewindow set_desktop_for_window {0-8,9}
+
+
+# Go to Workspace
+#(off by 1 as gnome uses 0 based workspaces)
+super + {1-9,0}
+    xdotool set_desktop {0-8,9}
+
+
+#Screenshots (Need to fix)
+
+# Take a screenshot
+Print
+	takeshot --now
+	
+# Take screenshot in 5 second
+alt + Print	
+	takeshot --in5
+
+# Take screenshot in 10 second
+shift + Print	
+	takeshot --in10
+
+# Take screenshot of active window
+ctrl + Print
+	takeshot --win
+
+# Take screenshot of area
+ctrl + alt + Print
+	takeshot --area
+
+# Brighness control
+ctrl + {F11,F12}
+	brightness{ --inc, --dec}
+	
+# Volume control
+Menu+ {F3,F2}
+	volume{ --inc, --dec}
+
+Menu + {F1}
+	volume --toggle
