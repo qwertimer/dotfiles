@@ -528,8 +528,6 @@ alias bat=batcat
 #source bash
 alias sb=". ~/.bashrc"
 
-alias bare='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
-
 #wal='/dev/null << wal -i ~/wallpapers/wallpapers/'
 # ------------------------- personalised completions -------------------------
 
