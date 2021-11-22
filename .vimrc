@@ -158,6 +158,8 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   Plug 'itchyny/lightline.vim'
 
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+  Plug 'junegunn/goyo.vim'
   "Deoplete with tabnine
   "if has('nvim')
   "  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -507,7 +509,7 @@ vnoremap <silent><Leader>y "yy <Bar> :call system('xclip', @y)<CR>
 " map ppp paste command to leader p
 nmap <leader>p !!ppp<CR>
 " map paste from last tempfile to leader l
-nmap <leader>l :r `lasty`<CR>
+nmap <leader>l :r `<CR>
 
 
 
@@ -532,13 +534,18 @@ au FileType python map <buffer> <leader>D ?def
 
 
 """"""""""""""""""""""""""""
+" Vim buffer, registers, history
+""""""""""""""""""""""""""""
+nnoremap <leader>r :registers<CR>
+
+""""""""""""""""""""""""""""
 " Set secondary leader
 """"""""""""""""""""""""""""
 
 
 let mapleader='\'
 
-
+map <leader>x ddp
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Ale (syntax checker and linter)
@@ -559,6 +566,21 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 1
 
 set omnifunc=ale#completion#OmniFunc
+
+
+""""""""""""""""""""""""""""
+" Goyo
+""""""""""""""""""""""""""""
+" GOYO {{{
+
+let g:goyo_width = 120
+let g:goyo_height = 60
+let g:goyo_liner = 0
+
+map <silent> <leader>gy :Goyo<CR> 
+
+" }}}
+
 
 
 " read personal/private vim configuration (keep last to override)

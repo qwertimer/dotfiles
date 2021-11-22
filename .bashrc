@@ -528,6 +528,7 @@ alias bat=batcat
 #source bash
 alias sb=". ~/.bashrc"
 
+
 #wal='/dev/null << wal -i ~/wallpapers/wallpapers/'
 # ------------------------- personalised completions -------------------------
 
