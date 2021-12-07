@@ -414,6 +414,8 @@ map <leader>x :e ~/buffer.md<cr>
 map <leader>pp :setlocal paste!<cr>
 
 
+" Toggle number mode on and off
+map <leader>nn :set nonumber!<cr>
 
 "=================================================================================
 "
